@@ -64,3 +64,67 @@ Example:
   ```
 
 - **500 Internal Server Error**: An unexpected error occurred on the server.
+
+### POST /users/login
+
+#### Description
+
+This endpoint is used to authenticate a user. It validates the input data, checks the provided credentials, and returns a JSON Web Token (JWT) upon successful authentication.
+
+#### Request Body
+
+The following fields are required in the request body:
+
+- **email** (string): A valid email address.
+- **password** (string): A password with a minimum length of 6 characters.
+
+Example:
+
+```json
+{
+  "email": "example@example.com",
+  "password": "password123"
+}
+```
+
+#### Responses
+
+- **200 OK**: The user was successfully authenticated.
+
+  ```json
+  {
+    "token": "<JWT_TOKEN>",
+    "user": {
+      "_id": "<USER_ID>",
+      "fullName": {
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "email": "example@example.com"
+    }
+  }
+  ```
+
+- **400 Bad Request**: Validation errors occurred.
+
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Please enter a valid email",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **401 Unauthorized**: Invalid email or password.
+
+  ```json
+  {
+    "message": "Invalid email or password"
+  }
+  ```
+
+- **500 Internal Server Error**: An unexpected error occurred on the server.
