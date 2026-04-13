@@ -2,12 +2,14 @@
 
 ## Endpoints
 
-### POST /api/users/register
+### POST /users/register
 
 #### Description
+
 This endpoint is used to register a new user. It validates the input data, hashes the password, and creates a new user in the database. Upon successful registration, it returns a JSON Web Token (JWT) and the user details.
 
 #### Request Body
+
 The following fields are required in the request body:
 
 - **email** (string): A valid email address.
@@ -17,6 +19,7 @@ The following fields are required in the request body:
 - **password** (string): A password with a minimum length of 6 characters.
 
 Example:
+
 ```json
 {
   "email": "example@example.com",
@@ -29,7 +32,9 @@ Example:
 ```
 
 #### Responses
+
 - **201 Created**: The user was successfully registered.
+
   ```json
   {
     "token": "<JWT_TOKEN>",
@@ -45,6 +50,7 @@ Example:
   ```
 
 - **400 Bad Request**: Validation errors occurred.
+
   ```json
   {
     "errors": [
