@@ -128,3 +128,68 @@ Example:
   ```
 
 - **500 Internal Server Error**: An unexpected error occurred on the server.
+
+### GET /users/profile
+
+#### Description
+
+This endpoint retrieves the profile of the authenticated user. The user must be logged in and provide a valid token for authentication.
+
+#### Headers
+
+- **Authorization** (string): A valid JWT token in the format `Bearer <token>`.
+
+#### Responses
+
+- **200 OK**: The user's profile was successfully retrieved.
+
+  ```json
+  {
+    "_id": "<USER_ID>",
+    "fullName": {
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "email": "example@example.com"
+  }
+  ```
+
+- **401 Unauthorized**: The user is not authenticated.
+
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+- **500 Internal Server Error**: An unexpected error occurred on the server.
+
+### GET /users/logout
+
+#### Description
+
+This endpoint logs out the authenticated user by clearing the authentication token and blacklisting it.
+
+#### Headers
+
+- **Authorization** (string): A valid JWT token in the format `Bearer <token>`.
+
+#### Responses
+
+- **200 OK**: The user was successfully logged out.
+
+  ```json
+  {
+    "message": "Logout successful"
+  }
+  ```
+
+- **401 Unauthorized**: The user is not authenticated.
+
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+- **500 Internal Server Error**: An unexpected error occurred on the server.
