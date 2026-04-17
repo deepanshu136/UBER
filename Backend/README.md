@@ -194,37 +194,35 @@ This endpoint logs out the authenticated user by clearing the authentication tok
 
 - **500 Internal Server Error**: An unexpected error occurred on the server.
 
-### POST /captains/register
+### Captain Routes
 
-#### Description
+#### POST /captains/register
 
-This endpoint is used to register a new captain. It validates the input data and creates a new captain in the database. Upon successful registration, it returns the captain's details.
+**Description**: Registers a new captain. Validates input data, hashes the password, and creates a new captain in the database. Returns a JWT and captain details upon success.
 
-#### Request Body
-
-The following fields are required in the request body:
+**Request Body**:
 
 - **email** (string): A valid email address.
 - **fullName** (object):
-  - **firstName** (string): The first name of the captain (minimum 3 characters).
-  - **lastName** (string): The last name of the captain (minimum 3 characters).
-- **password** (string): A password with a minimum length of 6 characters.
+  - **firstName** (string): First name (minimum 3 characters).
+  - **lastName** (string): Last name (minimum 3 characters).
+- **password** (string): Password (minimum 6 characters).
 - **vehicle** (object):
-  - **color** (string): The color of the vehicle (minimum 3 characters).
-  - **plate** (string): The vehicle's plate number (minimum 3 characters).
-  - **capacity** (integer): The capacity of the vehicle (minimum 1).
-  - **vehicleType** (string): The type of the vehicle (must be one of `car`, `motorcycle`, or `auto`).
+  - **color** (string): Vehicle color (minimum 3 characters).
+  - **plate** (string): Vehicle plate (minimum 3 characters).
+  - **capacity** (integer): Vehicle capacity (minimum 1).
+  - **vehicleType** (string): Either "car", "motorcycle", or "auto".
 
-Example:
+**Example Request**:
 
 ```json
 {
   "email": "captain@example.com",
   "fullName": {
-    "firstName": "Jane",
+    "firstName": "John",
     "lastName": "Doe"
   },
-  "password": "securepassword",
+  "password": "securePassword",
   "vehicle": {
     "color": "Red",
     "plate": "ABC123",
@@ -234,18 +232,18 @@ Example:
 }
 ```
 
-#### Responses
+**Example Response**:
 
-- **201 Created**: The captain was successfully registered.
-
-  ```json
-  {
-    "_id": "<CAPTAIN_ID>",
+```json
+{
+  "token": "<JWT_TOKEN>",
+  "captain": {
+    "_id": "12345",
+    "email": "captain@example.com",
     "fullName": {
-      "firstName": "Jane",
+      "firstName": "John",
       "lastName": "Doe"
     },
-    "email": "captain@example.com",
     "vehicle": {
       "color": "Red",
       "plate": "ABC123",
@@ -253,20 +251,94 @@ Example:
       "vehicleType": "car"
     }
   }
-  ```
+}
+```
 
-- **400 Bad Request**: Validation errors occurred.
+---
 
-  ```json
-  {
-    "errors": [
-      {
-        "msg": "Please enter a valid email",
-        "param": "email",
-        "location": "body"
-      }
-    ]
+#### POST /captains/login
+
+**Description**: Authenticates a captain and returns a JWT.
+
+**Request Body**:
+
+- **email** (string): A valid email address.
+- **password** (string): Password (minimum 6 characters).
+
+**Example Request**:
+
+```json
+{
+  "email": "captain@example.com",
+  "password": "securePassword"
+}
+```
+
+**Example Response**:
+
+```json
+{
+  "token": "<JWT_TOKEN>",
+  "captain": {
+    "_id": "12345",
+    "email": "captain@example.com",
+    "fullName": {
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
   }
-  ```
+}
+```
 
-- **500 Internal Server Error**: An unexpected error occurred on the server.
+---
+
+#### GET /captains/profile
+
+**Description**: Retrieves the profile of the authenticated captain.
+
+**Headers**:
+
+- **Authorization**: Bearer token.
+
+**Example Response**:
+
+```json
+{
+  "_id": "12345",
+  "email": "captain@example.com",
+  "fullName": {
+    "firstName": "John",
+    "lastName": "Doe"
+  },
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+---
+
+#### GET /captains/logout
+
+**Description**: Logs out the captain by blacklisting the token.
+
+**Headers**:
+
+- **Authorization**: Bearer token.
+
+**Example Response**:
+
+```json
+{
+  "message": "Logout successful"
+}
+```
