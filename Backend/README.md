@@ -193,3 +193,80 @@ This endpoint logs out the authenticated user by clearing the authentication tok
   ```
 
 - **500 Internal Server Error**: An unexpected error occurred on the server.
+
+### POST /captains/register
+
+#### Description
+
+This endpoint is used to register a new captain. It validates the input data and creates a new captain in the database. Upon successful registration, it returns the captain's details.
+
+#### Request Body
+
+The following fields are required in the request body:
+
+- **email** (string): A valid email address.
+- **fullName** (object):
+  - **firstName** (string): The first name of the captain (minimum 3 characters).
+  - **lastName** (string): The last name of the captain (minimum 3 characters).
+- **password** (string): A password with a minimum length of 6 characters.
+- **vehicle** (object):
+  - **color** (string): The color of the vehicle (minimum 3 characters).
+  - **plate** (string): The vehicle's plate number (minimum 3 characters).
+  - **capacity** (integer): The capacity of the vehicle (minimum 1).
+  - **vehicleType** (string): The type of the vehicle (must be one of `car`, `motorcycle`, or `auto`).
+
+Example:
+
+```json
+{
+  "email": "captain@example.com",
+  "fullName": {
+    "firstName": "Jane",
+    "lastName": "Doe"
+  },
+  "password": "securepassword",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+#### Responses
+
+- **201 Created**: The captain was successfully registered.
+
+  ```json
+  {
+    "_id": "<CAPTAIN_ID>",
+    "fullName": {
+      "firstName": "Jane",
+      "lastName": "Doe"
+    },
+    "email": "captain@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+  ```
+
+- **400 Bad Request**: Validation errors occurred.
+
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Please enter a valid email",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **500 Internal Server Error**: An unexpected error occurred on the server.
